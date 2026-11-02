@@ -1,0 +1,5 @@
+{
+  "eve_path": "data/sample_eve.jsonl",
+  "suricata_path": "suricata",
+  "rule_path": "rules/local.rules"
+}
