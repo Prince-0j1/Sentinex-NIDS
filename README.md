@@ -1,96 +1,139 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&height=190&color=0:080d1c,50:20205c,100:00b8a9&text=SENTINEX&fontColor=ffffff&fontSize=56&fontAlignY=38&desc=Network%20Intrusion%20Detection%20%26%20Alert%20Triage&descAlignY=60&descSize=14" width="100%" alt="Sentinex banner" />
+<img src="https://capsule-render.vercel.app/api?type=waving&amp;height=190&amp;color=0:080d1c,50:20205c,100:00b8a9&amp;text=SENTINEX&amp;fontColor=ffffff&amp;fontSize=56&amp;fontAlignY=38&amp;desc=Network%20Intrusion%20Detection%20%26%20Alert%20Triage&amp;descAlignY=60&amp;descSize=14" width="100%" alt="SENTINEX — Network Intrusion Detection and Alert Triage" />
 
 
 
 
 
 
-Detect. Analyze. Defend.
-A local dashboard for reviewing Suricata alerts and organizing defensive triage.
+DETECT · ANALYZE · DEFEND
 
-Features · Architecture · Setup · Real IDS test · Limitations
+A local dashboard for reviewing Suricata alerts, exploring network events, and organizing defensive triage.
+
+Overview · Features · Architecture · Installation · Testing · Limitations
 
 </div>
 
-◈ What is Sentinex?
+◈ Overview
 
-Sentinex reads Suricata EVE JSON alert events and presents them in a local dashboard. It helps a learner inspect alert details, filter events, track analyst workflow status, and export alert records.
+SENTINEX is a Network Intrusion Detection System (NIDS) support dashboard built with Python and Flask. It reads alert events from Suricata's EVE JSON log and presents useful information in a single interface.
 
-Project context: Developed for Task 4 — Network Intrusion Detection System, as part of the CodeAlpha Cyber Security Internship.
+Use it to inspect alert signatures, source and destination addresses, protocols, timestamps, severity, and analyst workflow status. You can also search, filter, and export alert records.
 
-Important distinction: Suricata is the detection engine. Sentinex is the alert-review dashboard and log parser; it does not independently inspect live network traffic or block attackers.
+Internship task: CodeAlpha Cyber Security — Task 4: Network Intrusion Detection System.
+
+Architecture note: Suricata is the network detection engine. SENTINEX parses and displays Suricata's alert output. SENTINEX itself does not capture packets, independently detect attacks, or block traffic.
 
 ✦ Features
 
-Capability
+Feature
 
-What it does
+Description
 
-EVE JSON parsing
+Suricata EVE JSON
 
-Reads line-delimited Suricata events and selects alert events.
+Reads structured Suricata events and extracts alert records.
 
-Alert triage
+Alert overview
 
-Shows signature, category, timestamp, IPs, ports, protocol, and severity.
+Displays signature, timestamp, IP addresses, ports, protocol, and severity when available.
 
-Severity filters
+Severity filtering
 
-Filters events into high, medium, and low groups based on Suricata severity values.
+Groups alerts using the severity value supplied by Suricata.
 
 Search
 
-Searches the displayed alert data.
+Helps locate alerts in the dashboard.
 
-Analyst status
+Analyst workflow
 
-Stores a response status for an alert (workflow tracking only).
+Tracks an alert's review status; this is record-keeping, not automated containment.
 
 CSV export
 
-Exports alert records to sentinelgrid_alerts.csv.
+Exports alert records for further analysis.
 
 Demo data
 
-Generates clearly labelled simulated lab events for UI testing.
+Provides clearly labelled simulated records to test the dashboard interface.
 
-Health endpoint
+Health check
 
-/health reports whether the configured Suricata executable is discoverable and shows the configured EVE path.
+Provides a basic application health/configuration endpoint.
 
-🧬 How it works
+🧬 Architecture
 
 flowchart TD
-    A[Authorized network traffic] --> B[Suricata engine]
-    B --> C[Detection rules]
+    A[Authorized network traffic] --> B[Suricata detection engine]
+    B --> C[Enabled detection rules]
     C --> D[EVE JSON log]
-    D --> E[Sentinex parser]
-    E --> F[Severity mapping and search]
-    F --> G[Local alert dashboard]
-    F --> H[CSV export]
-    G --> I[Analyst triage status]
+    D --> E[SENTINEX log parser]
+    E --> F[Alert fields and severity]
+    F --> G[Search and filtering]
+    G --> H[Local web dashboard]
+    G --> I[CSV export]
+    H --> J[Analyst triage status]
+    style B fill:#172554,stroke:#38bdf8,color:#fff
+    style E fill:#134e4a,stroke:#2dd4bf,color:#fff
+    style H fill:#312e81,stroke:#a5b4fc,color:#fff
 
-Suricata monitors an authorized interface and evaluates traffic against enabled rules.
+Event flow
+
+Suricata monitors a network interface that you are authorized to inspect.
+
+Suricata evaluates observed traffic against its enabled rules.
 
 When a rule matches, Suricata can write an alert event to its EVE JSON log.
 
-Sentinex reads the configured log file and extracts alert fields.
+SENTINEX reads the configured log and extracts available alert fields.
 
-The dashboard maps severity 1 to high, 2 to medium, and other values to low, then provides filtering and export.
+The dashboard presents events for search, filtering, review, and export.
 
-🖥️ Getting started
+🧰 Technology stack
+
+Technology
+
+Role
+
+Python
+
+Application logic and log parsing
+
+Flask
+
+Local web application and routes
+
+Suricata
+
+Network traffic inspection and rule-based detection
+
+EVE JSON
+
+Structured event/log format
+
+HTML, CSS, JavaScript
+
+Dashboard interface and interactions
+
+CSV
+
+Portable alert export
+
+⚡ Installation
 
 Requirements
 
 Python 3.10 or newer recommended.
 
-Flask (installed from requirements.txt).
+The Python packages listed in requirements.txt.
 
-For actual detection: Suricata installed and configured separately, an authorized interface, enabled EVE JSON alert output, and an applicable rule set.
+For real IDS alerts: Suricata installed and configured separately.
 
-Run the dashboard (Windows)
+An interface and network you own or have explicit permission to monitor.
+
+Windows
 
 git clone https://github.com/<your-username>/Sentinex-NIDS.git
 cd Sentinex-NIDS
@@ -100,52 +143,63 @@ python -m pip install --upgrade pip
 pip install -r requirements.txt
 python app.py
 
-Or run run_windows.bat.
+Alternatively, run the included run_windows.bat.
 
-Open http://127.0.0.1:5002.
+Open http://127.0.0.1:5002 in your browser.
 
 Linux / macOS
 
+git clone https://github.com/<your-username>/Sentinex-NIDS.git
+cd Sentinex-NIDS
 python3 -m venv .venv
 source .venv/bin/activate
+python -m pip install --upgrade pip
 pip install -r requirements.txt
 python app.py
 
-🧪 Test the dashboard with demo events
+Then open http://127.0.0.1:5002.
 
-Open the dashboard at http://127.0.0.1:5002.
+🧪 Testing
 
-Select Generate lab demo data.
+1. Test the dashboard with demo events
 
-Confirm that the simulated events appear and that their lab/demo nature is clearly understood.
+Start SENTINEX and open http://127.0.0.1:5002.
 
-Try severity filtering and search.
+Use Generate lab demo data in the dashboard.
 
-Change an alert's analyst response status and confirm it is retained.
+Confirm that sample alert rows appear.
 
-Export the alert list to CSV and inspect the file.
+Try the severity filters and search.
 
-Demo events validate the dashboard workflow only. They are not real detections and must not be presented as live attacks.
+Change an alert's analyst status, if the control is available.
 
-🛰️ Connect real Suricata alerts
+Export the displayed records to CSV and open the file.
 
-Install and configure Suricata by following the official documentation.
+Expected result: The dashboard displays sample records and its filtering/export workflow functions as expected.
 
-Configure Suricata to monitor an interface you are authorized to inspect and enable EVE JSON alert output.
+Be transparent: Demo events are simulated UI test data. They are not proof that Suricata detected real malicious traffic.
+
+2. Test with real Suricata output
+
+Install Suricata using the official Suricata documentation.
+
+Configure it to monitor an authorized interface.
+
+Enable EVE JSON output and ensure alert events are included.
 
 Review rules/local.rules and load the included local ICMP echo-request rule in your lab configuration.
 
-Start Suricata and generate permitted test traffic in your isolated/authorized lab (for example, an ICMP ping if the network allows it).
+Start Suricata and generate permitted test traffic in your own lab. For example, use an ICMP ping if your network permits it.
 
-Confirm that the actual eve.json contains a matching event with event_type: "alert".
+Check the actual eve.json file for an event whose event_type is alert.
 
-Update the eve_path value in config.json to the full path of that log file, or use the dashboard's log-path configuration control.
+Set SENTINEX's EVE log path to that file using the dashboard's log-path setting or the relevant configuration in config.json.
 
-Refresh Sentinex and confirm the real event appears.
+Refresh the dashboard and verify that the real event appears.
 
-The included rule is a simple lab demonstration rule, not a comprehensive attack-detection policy. Suricata's interface names, configuration paths, and service commands vary by operating system and installation method.
+The included ICMP rule is a simple lab test rule, not a complete intrusion-detection policy. Suricata configuration paths and service commands vary by operating system and installation.
 
-🔌 Useful endpoints
+🔎 Application endpoints
 
 Endpoint
 
@@ -153,54 +207,58 @@ Purpose
 
 /
 
-Alert dashboard
+Main alert dashboard
 
 /health
 
-Basic application/configuration health response
+Basic application/configuration health information
 
 /export.csv
 
-Download parsed alert records
+CSV export of parsed alert records
 
-📁 Project structure
+🗂️ Project structure
 
 Sentinex-NIDS/
-├── app.py                 # EVE JSON parsing and Flask routes
-├── config.json            # EVE log path and Suricata/rule configuration
-├── requirements.txt       # Flask dependency
+├── app.py
+├── config.json
+├── requirements.txt
 ├── rules/
-│   └── local.rules        # Example local lab rule
+│   └── local.rules
 ├── data/
-│   └── sample_eve.jsonl   # Demo alert data
+│   └── sample_eve.jsonl
 ├── templates/
 │   ├── base.html
 │   └── index.html
 ├── run_windows.bat
 └── run_linux_mac.sh
 
-⚠️ Scope & limitations
+⚠️ Scope and limitations
 
-Sentinex does not itself capture or inspect packets; Suricata performs detection.
+Suricata performs the actual network inspection and rule matching; SENTINEX displays the resulting alert records.
 
-Demo events are simulated. Only events present in the configured real EVE log are evidence of Suricata output.
+A rule match is an alert, not proof that an intrusion succeeded.
 
-A rule match is an alert, not proof that an intrusion succeeded. Alerts can be false positives or false negatives.
+Detection depends on configured rules, interface visibility, and Suricata configuration. False positives and false negatives are possible.
 
-The response-status feature records analyst workflow state. It does not block an IP, terminate a connection, or change firewall rules.
+Demo records are simulated and must not be described as real attack detections.
 
-The severity grouping is a simplified display mapping of Suricata's numeric severity field.
+Analyst status tracking does not block IP addresses, terminate connections, or modify firewall rules.
 
-Use only on networks and systems you own or have explicit permission to monitor.
+Severity labels are a simplified presentation of the severity values in the log.
 
-🧑‍💻 Built for learning
+Do not use the tool to monitor networks or devices without authorization.
 
-Topics explored: network IDS concepts, Suricata rules, EVE JSON, alert triage, severity classification, log parsing, and defensive monitoring workflows.
+📚 Learning outcomes
+
+Working on SENTINEX introduces practical concepts in network intrusion detection, Suricata rules, EVE JSON log analysis, IP/port/protocol context, alert triage, severity review, Python log processing, and Flask dashboards.
 
 <div align="center">
 
-SENTINEX · Visibility is the first step in defense.
+SENTINEX
 
-<sub>CodeAlpha Cyber Security Internship · Network Intrusion Detection System</sub>
+Visibility is the first step in defense.
+
+<sub>Built as a learning project for the CodeAlpha Cyber Security Internship.</sub>
 
 </div>
