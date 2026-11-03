@@ -229,4 +229,88 @@ http://127.0.0.1:5002
 6. Change an analyst review status if available.
 7. Export the records as CSV.
 
-**Expected result:** Simulated records should appear and allow you to test the dashboard
+**Expected result:** Simulated records should appear and allow you to test the dashboard's available features.
+
+> Demo records are simulated interface-testing data. They are not real network detections.
+
+### Test 2 — Real Suricata Integration
+
+1. Install Suricata using its official documentation.
+2. Configure Suricata to monitor an authorized network interface.
+3. Enable EVE JSON output, including alert events.
+4. Review `rules/local.rules`.
+5. Load the included local ICMP echo-request rule in your lab configuration.
+6. Start Suricata.
+7. Generate permitted test traffic, such as an ICMP ping, if supported by your network.
+8. Inspect `eve.json` for an event with `"event_type": "alert"`.
+9. Configure SENTINEX to read the correct EVE JSON file.
+10. Refresh the dashboard and check whether the event appears.
+
+**Expected result:** If Suricata generates a matching alert and SENTINEX is configured to read the correct log, the event should appear in the dashboard.
+
+Official documentation: https://docs.suricata.io/
+
+---
+
+## 🔎 Application Routes
+
+| Route         | Description                                  |
+| ------------- | -------------------------------------------- |
+| `/`           | Main dashboard                               |
+| `/health`     | Application health/configuration information |
+| `/export.csv` | CSV export of parsed alert records           |
+
+---
+
+## ⚠️ Security Scope & Limitations
+
+SENTINEX is a learning and defensive monitoring project.
+
+* Suricata performs the actual network detection.
+* SENTINEX displays events recorded by Suricata.
+* A rule match does not prove that an intrusion succeeded.
+* Detection quality depends on network visibility, rule coverage, and configuration.
+* False positives and false negatives are possible.
+* Analyst status tracking does not block IP addresses or terminate connections.
+* Demo alerts are simulated.
+* Use only on networks and devices you own or are explicitly authorized to monitor.
+
+---
+
+## 🎯 Learning Outcomes
+
+Through this project, I explored:
+
+* Network Intrusion Detection System concepts.
+* Suricata configuration and detection rules.
+* EVE JSON event processing.
+* Python-based log analysis.
+* Flask dashboard development.
+* Alert investigation and severity classification.
+* Defensive security monitoring workflows.
+
+---
+
+## 👨‍💻 Developer
+
+<div align="center">
+
+### PRINCE KOTADIYA
+
+**Cyber Security Student | Python Developer**
+
+Built as part of the **CodeAlpha Cyber Security Internship**.
+
+</div>
+
+---
+
+<div align="center">
+
+### SENTINEX
+
+**Visibility is the first step in defense.**
+
+<sub>DETECT · ANALYZE · INVESTIGATE · DEFEND</sub>
+
+</div>
