@@ -1,7 +1,10 @@
 <div align="center">
 
-<img src="assets/sentinex-banner.png" alt="SENTINEX — Network Intrusion Detection and Alert Triage" width="100%">
-
+<p align="center">
+  <img src="https://raw.githubusercontent.com/Prince-0j1/Sentinex-NIDS/main/assets/sentinex-banner.png"
+       alt="SENTINEX - Network Intrusion Detection System"
+       width="100%">
+</p>
 <br>
 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-3776AB?style=for-the-badge)
